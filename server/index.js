@@ -5,6 +5,7 @@ dotenv.config();
 
 import { chats } from "./data/data.js"
 import mongoose from "mongoose";
+import userRoutes from './routes/userRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 8001
@@ -13,21 +14,8 @@ const DB = process.env.DB_URL
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("API is Running")
-})
+app.use("/user", userRoutes)
 
-app.get("/chat", (req, res) => {
-    res.send(chats)
-})
-
-app.get("/chat/:id", (req, res) => {
-
-    //const Id = req.params.id
-    const singleChat = chats.find((chat) => chat._id === req.params.id)
-    console.log(singleChat);
-    res.send(singleChat)
-})
 
 mongoose
     .connect(DB)
