@@ -1,59 +1,73 @@
-import asyncHandler from 'express-async-handler'
+import asyncHandler from 'express-async-handler';
 import UserModel from '../models/userModel.js';
-import { generateToken } from '../config/generateToken.js';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-
+// Register User
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password, pic } = req.body
+    const { name, email, password, pic } = req.body;
 
+    // Check for required fields
     if (!name || !email || !password) {
-        res.status(400)
-        throw new Error("Please fill all required feilds")
+        return res.status(400).send({ message: "Please fill all required fields" });
     }
-    const userExists = await UserModel.findOne({ email })
 
+    // Check if user already exists
+    const userExists = await UserModel.findOne({ email });
     if (userExists) {
-        res.status(400).send("User exists already")
-
+        return res.status(400).send("User already exists");
     }
 
-    const user = await UserModel.create({
-        name, email, password, pic
-    })
+    // Hash the password
+    const salt = 10;
+    const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Create the user
+    const user = await UserModel.create({
+        name,
+        email,
+        password: hashedPassword,
+        pic
+    });
+
+    // If user is created successfully
     if (user) {
         res.status(201).json({
             _id: user._id,
             name: user.name,
             email: user.email,
-            pic: user.pic, //after successfull registration need to create token with user id
-            token: generateToken(user._id)
-        })
+            pic: user.pic
+        });
     } else {
         res.status(400);
-        throw new Error("Something went wrong. Please try againg")
+        throw new Error("Something went wrong. Please try again.");
     }
+});
 
-})
-
+// Login User
 const loginUser = asyncHandler(async (req, res) => {
-    const { email, password } = req.body
-    const user = await UserModel.findOne({ email });
+    const { email, password } = req.body;
 
-    if (user && (await user.matchPassword(password))) {
-        res.status(200).send({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            pic: user.pic,
-            token: generateToken(user._id)
-        })
-    } else {
-        res.status(401)
-        throw new Error("Invalid Email or Password")
+    // Find the user by email
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+        return res.status(400).json({ message: "Email does not exist. Please register" });
     }
 
+    // Compare the provided password with the stored hashed password
+    const comparePassword = await bcrypt.compare(password, user.password);
+    if (!comparePassword) {
+        return res.status(400).json({ message: "Incorrect password" });
+    }
 
-})
+    // Exclude password from the response
+    const { password: _, ...info } = user._doc;
 
-export default { registerUser, loginUser }
+    // Generate access token upon successful login
+    const accessToken = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_CODE, { expiresIn: '50d' });
+
+    // Respond with user info and access token
+    res.status(200).json({ message: "Login successful.", ...info, accessToken });
+});
+
+export default { registerUser, loginUser };
