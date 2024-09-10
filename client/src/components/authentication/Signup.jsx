@@ -1,5 +1,9 @@
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import { useToast } from '@chakra-ui/react'
+import { API_BASE_URL } from '../../config'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Signup = () => {
     const [name, setName] = useState()
@@ -9,18 +13,79 @@ const Signup = () => {
     const [pic, setPic] = useState()
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [loading, setLoading] = useState(false)
 
-    const handleShowPassword = () => {
-        setShowPassword(!showPassword)
+    const navigate = useNavigate()
+    const toast = useToast()
+
+    const handleShowPassword = () => setShowPassword(!showPassword);
+    const handleShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
+
+    const postDetails = (picture) => { }
+
+    const sumbitHandler = async () => {
+        setLoading(true)
+        if (!name || !email || !password || !confirmPassword) {
+            toast({
+                title: "Mandatory to Fill",
+                description: "Please fill all the mandatory feilds to continue",
+                status: "warning",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setLoading(false);
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            toast({
+                title: "Password and Confirm Password must be same",
+                status: "warning",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setLoading(false);
+            return;
+        }
+        console.log(name, email, password, pic);
+        try {
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                },
+            };
+
+            const { data } = await axios.post(
+                `${API_BASE_URL}/user/register`,
+                { name, email, password, pic },
+                config
+            )
+            console.log(data);
+            toast({
+                title: "Registration Successful",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            localStorage.setItem("userInfo", JSON.stringify(data));
+            setLoading(false)
+            navigate("/chat")
+
+        } catch (error) {
+            toast({
+                title: "Error Occured!",
+                description: error.response?.data?.message || "Something went wrong",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setLoading(false)
+        }
     }
-
-    const handleShowConfirmPassword = () => {
-        setShowConfirmPassword(!showConfirmPassword)
-    }
-
-    const postDetails = (pic) => { }
-
-    const sumbitHandler = () => { }
 
     return (
         <VStack spacing={'18px'}>
@@ -75,7 +140,7 @@ const Signup = () => {
             </FormControl>
 
 
-            <FormControl id='pic' isRequired >
+            {/* <FormControl id='pic' isRequired >
                 <FormLabel>Upload Profile Pic: </FormLabel>
                 <Input
                     type='file'
@@ -83,7 +148,7 @@ const Signup = () => {
                     p={1.5}
                     accept='image/*'
                 />
-            </FormControl>
+            </FormControl> */}
 
             <Button
                 p={6}
@@ -91,20 +156,12 @@ const Signup = () => {
                 colorScheme={'blue'}
                 w={"100%"}
                 mt={4}
+                isLoading={loading}
+                onClick={sumbitHandler}
             >
                 Signup
             </Button>
 
-            <Button
-                p={6}
-                borderRadius={'xl'}
-                colorScheme={'green'}
-                w={"100%"}
-                mt={3}
-                onClick={sumbitHandler}
-            >
-                Login
-            </Button>
         </VStack>
     )
 }

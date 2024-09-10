@@ -18,7 +18,7 @@ const HomePage = () => {
                 borderWidth={'2px'}
                 w={'100%'}
             >
-                <Text fontSize={'xl'}>❤️ Speak-a-Ton ❤️</Text>
+                <Text fontSize={'xl'}>❤️ Chat-A-Ton ❤️</Text>
             </Box>
             <Box
                 p={5}
