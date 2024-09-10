@@ -70,4 +70,20 @@ const loginUser = asyncHandler(async (req, res) => {
     res.status(200).json({ message: "Login successful.", ...info, accessToken });
 });
 
-export default { registerUser, loginUser };
+// /user?search=priya
+const allUsers = asyncHandler(async (req, res) => {
+
+    const keyWord = req.query.search ? {
+        $or: [
+            { name: { $regex: req.query.search, $options: "i" } }, //regex helping in matching the string from query with mongo db
+            { email: { $regex: req.query.search, $options: "i" } },
+        ]
+    } : {}
+
+    const users = await UserModel.find(keyWord).find({ _id: { $ne: req.user._id } }) //execept the current logged in user return other users
+    res.status(200).send(users)
+
+});
+
+
+export default { registerUser, loginUser, allUsers };
