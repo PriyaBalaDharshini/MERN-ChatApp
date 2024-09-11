@@ -3,11 +3,13 @@ import { createRoot } from 'react-dom/client'
 import { ChakraProvider } from '@chakra-ui/react'
 import App from './App.jsx'
 import './index.css'
+import ChatProvider from './context/ChatProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
-
-  <ChakraProvider>
-    <App />
-  </ChakraProvider>
+  <ChatProvider>
+    <ChakraProvider>
+      <App />
+    </ChakraProvider>
+  </ChatProvider>
 
 )
