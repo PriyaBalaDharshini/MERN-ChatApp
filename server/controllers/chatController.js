@@ -58,25 +58,20 @@ const accessChat = asyncHandler(async (req, res) => {
 //Fetching all the user for a perticular chat
 const fetchChat = asyncHandler(async (req, res) => {
     try {
-        console.log("Fetching chats for user:", req.user._id); // Log the user ID
-
         const chats = await ChatModel.find({
             users: { $elemMatch: { $eq: req.user._id } },
         })
             .populate("users", "-password")
             .populate("latestMessage")
             .populate("groupAdmin", "-password")
-            .sort({ updatedAt: -1 })
-            .then(async (results) => {
-                results = await UserModel.populate(results, {
-                    path: "latestMessage.sender",
-                    select: "name email pic",
-                });
-                res.status(200).send(results)
-            })
+            .sort({ updatedAt: -1 });
 
-        console.log("Fetched chats:", chats); // Log the fetched chats
-        res.status(200).send(chats);
+        const populatedChats = await UserModel.populate(chats, {
+            path: "latestMessage.sender",
+            select: "name email pic",
+        });
+
+        res.status(200).send(populatedChats);
     } catch (error) {
         console.error("Error fetching chats:", error);
         res.status(400).json({ message: error.message });
@@ -88,18 +83,18 @@ const createGroupChat = asyncHandler(async (req, res) => {
         return res.status(400).send({ message: "Please fill all the fields" });
     }
 
-    var users = JSON.parse(req.body.users); // Parse the users array from request body
+    var users = JSON.parse(req.body.users);
 
     if (users.length < 2) {
         return res.status(400).send("More than 2 users required for a group chat");
     }
 
-    users.push(req.user); // Add the logged-in user to the users array
+    users.push(req.user);
 
     try {
         const groupChat = await ChatModel.create({
             chatName: req.body.name,
-            users: users, // Use the updated users array
+            users: uniqueUsers,
             isGroupChat: true,
             groupAdmin: req.user
         });
@@ -113,6 +108,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
+
 
 const renameGroup = asyncHandler(async (req, res) => {
     const { chatId, chatName } = req.body
@@ -169,4 +165,21 @@ const removeFromGroup = asyncHandler(async (req, res) => {
     }
 })
 
-export default { accessChat, fetchChat, createGroupChat, renameGroup, addToGroup, removeFromGroup }
+const deleteGroup = asyncHandler(async (req, res) => {
+    const { chatId } = req.body;
+
+    try {
+        const deletedGroup = await ChatModel.findByIdAndDelete(chatId);
+
+        if (!deletedGroup) {
+            return res.status(404).json({ message: "Group chat not found" }); // 404 if group not found
+        }
+
+        res.status(200).json({ message: "Group chat deleted successfully", deletedGroup }); // 200 if deleted successfully
+    } catch (error) {
+        console.error("Error deleting group:", error);
+        res.status(500).json({ message: "Failed to delete group", error: error.message }); // 500 for server errors
+    }
+});
+
+export default { accessChat, fetchChat, createGroupChat, renameGroup, addToGroup, removeFromGroup, deleteGroup }

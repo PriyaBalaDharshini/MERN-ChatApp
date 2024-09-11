@@ -14,5 +14,7 @@ router.put("/rename-group", protect, chatController.renameGroup)
 router.put("/addto-group", protect, chatController.addToGroup)
 router.put("/removefrom-group", protect, chatController.removeFromGroup)
 
+router.delete("/delete-group", protect, chatController.deleteGroup)
+
 
 export default router
