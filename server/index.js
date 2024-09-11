@@ -2,10 +2,9 @@ import express from "express"
 import dotenv from "dotenv"
 import cors from 'cors'
 dotenv.config();
-
-import { chats } from "./data/data.js"
 import mongoose from "mongoose";
 import userRoutes from './routes/userRoutes.js'
+import chatRoutes from './routes/chatRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 8001
@@ -15,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/user", userRoutes)
+app.use("/chat", chatRoutes)
 
 
 mongoose
