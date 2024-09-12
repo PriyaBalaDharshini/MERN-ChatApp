@@ -6,6 +6,7 @@ import { API_BASE_URL } from '../../config'
 import { AddIcon } from '@chakra-ui/icons'
 import ChatLoading from './ChatLoading'
 import { getSender } from "../../config/ChatLogics"
+import GroupChatModel from './GroupChatModel'
 
 const MyChats = () => {
 
@@ -65,14 +66,16 @@ const MyChats = () => {
 
             >
                 My Chats
-                <Button
-                    display={'flex'}
-                    fontSize={{ base: "16px", md: "8px", lg: '16px' }}
-                    rightIcon={<AddIcon />}
+                <GroupChatModel>
+                    <Button
+                        display={'flex'}
+                        fontSize={{ base: "16px", md: "8px", lg: '16px' }}
+                        rightIcon={<AddIcon />}
 
-                >
-                    New Group Chat
-                </Button>
+                    >
+                        New Group
+                    </Button>
+                </GroupChatModel>
             </Box>
 
             <Box
@@ -80,23 +83,26 @@ const MyChats = () => {
                 flexDir={'column'}
                 p={3}
                 bg={'#F8F8F8'}
-                w={'100%'}
+                w={'95%'}
                 h={'100%'}
                 borderRadius={'lg'}
                 overflow={'hidden'}
             >
                 {chat ? (
-                    <Stack overflowY={'scroll'}>
+                    <Stack overflowY={'scroll'} p={4}>
                         {chat.map((c) => (
                             <Box
                                 onClick={() => setSelectedChat(c)}
                                 cursor="pointer"
                                 bg={selectedChat === c ? "#38B2AC" : "#E8E8E8"}
                                 color={selectedChat === c ? "white" : "black"}
-                                px={3}
-                                py={2}
+                                px={4}
+                                py={4}
+                                mt={4}
                                 borderRadius="lg"
                                 key={c._id}
+
+
                             >
                                 <Text>
                                     {!c.isGroupChat ? (
