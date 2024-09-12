@@ -1,20 +1,19 @@
-import { Box, Container, Text, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
-import Login from '../components/authentication/Login'
-import Signup from '../components/authentication/Signup'
-import { useNavigate } from 'react-router-dom'
-
+import { Box, Container, Text, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
+import Login from '../components/authentication/Login';
+import Signup from '../components/authentication/Signup';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
+    // Check if the user is already logged in, redirect to chat page if they are
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("userInfo"))
-
+        const user = JSON.parse(localStorage.getItem("userInfo"));
         if (user) {
-            navigate("/chat")
+            navigate("/chat");
         }
-    }, [navigate])
+    }, [navigate]);
 
     return (
         <Container maxW='xl' centerContent>
@@ -45,19 +44,16 @@ const HomePage = () => {
                     </TabList>
                     <TabPanels>
                         <TabPanel>
-
                             <Login />
-
                         </TabPanel>
                         <TabPanel>
                             <Signup />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
-
             </Box>
         </Container>
-    )
-}
+    );
+};
 
-export default HomePage
+export default HomePage;

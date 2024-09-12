@@ -1,45 +1,44 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// 1. Create a context to hold the state globally
+const ChatContext = createContext();
 
-const navigate = useNavigate()
-//create context-1
-const ChatContext = createContext()
-
-//create Provider-2
+// 2. Create the Provider component to wrap around your app and pass the context value
 const ChatProvider = ({ children }) => {
+    const navigate = useNavigate();
 
-    //create state - 5
-    const [user, setUser] = useState()
+    // 5. Create state variables (user) that will be accessible throughout the app
+    const [user, setUser] = useState();
+    const [selectedChat, setSelectedChat] = useState();
+    const [chat, setChat] = useState([]);
 
-    //7
+    // 7. Use the useEffect hook to run this when the component mounts
     useEffect(() => {
-        const userInfo = JSON.parse(localStorage.getItem("userInfo"))
-        //storing userinfo in setuser state -8
-        setUser(userInfo)
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-        //9
+        // 8. Storing the retrieved userInfo into state using setUser
+        setUser(userInfo);
+
+        // 9. If no user is found, redirect to the home page ("/")
         if (!userInfo) {
-            navigate("/")
+            navigate("/");
         }
+    }, [navigate]);
 
-    }, [navigate])
-
-
-    //make state accessble for while app by passing it as a value props - 6
+    // 6. Pass the state (user, setUser) down to the whole app via the context provider
     return (
-        <ChatContext.Provider value={{ user, setUser }}>
+        <ChatContext.Provider value={{ user, setUser, selectedChat, setSelectedChat, chat, setChat }}>
             {children}
         </ChatContext.Provider>
-    )
-}
+    );
+};
 
-//  Making stat accessble = use useContext Hook - 4
-//hook will take the contect which we creatd using  createContext
+// 4. Create a custom hook to allow easy access to the context
 export const ChatState = () => {
-    useContext(ChatContext)
-}
+    // You need to return the value here, otherwise it won't work
+    return useContext(ChatContext);
+};
 
-
+// 3. Export the Provider component, which will be used to wrap the entire app
 export default ChatProvider;
-//wrap the whole app with the provider -3 in main.jsx

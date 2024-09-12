@@ -65,8 +65,10 @@ const loginUser = asyncHandler(async (req, res) => {
 
     // Generate access token upon successful login
     const accessToken = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_CODE, { expiresIn: '50d' });
+    console.log(accessToken);
 
-    // Respond with user info and access token
+
+
     res.status(200).json({ message: "Login successful.", ...info, accessToken });
 });
 
