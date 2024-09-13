@@ -9,7 +9,7 @@ import ProfileModel from './ProfileModel'
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     const { user, selectedChat, setSelectedChat } = ChatState()
-    console.log(selectedChat)
+    // console.log(selectedChat)
     return (
         <>
             {selectedChat ? (
@@ -35,11 +35,24 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                             </>
                         ) : (
                             <>{selectedChat.chatName.toUpperCase()}
-                                {/* <UpdateGroupChatModel fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} /> */}
+                                <UpdateGroupChatModel fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
                             </>
                         )}
 
                     </Text>
+                    <Box
+                        display={'flex'}
+                        flexDir={'column'}
+                        justifyContent={'flex-end'}
+                        p={5}
+                        bg={'#E8E8E8'}
+                        w={'100%'}
+                        h={'100%'}
+                        borderRadius={'lg'}
+                        overflow={'hidden'}
+                    >
+                        Messages Here
+                    </Box>
                 </>
             ) : (
                 <Box
