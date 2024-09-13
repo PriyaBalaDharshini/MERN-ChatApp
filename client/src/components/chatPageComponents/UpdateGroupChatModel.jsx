@@ -16,7 +16,7 @@ import axios from 'axios'
 import { API_BASE_URL } from '../../config'
 import UserListItem from '../userAvatar/UserListItem'
 
-const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
+const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { selectedChat, setSelectedChat, user } = ChatState()
 
@@ -115,6 +115,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
 
             user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
             setFetchAgain(!fetchAgain);
+            fetchMessages()
             setLoading(false);
 
         } catch (error) {
