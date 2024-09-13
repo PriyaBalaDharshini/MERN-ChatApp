@@ -5,6 +5,7 @@ dotenv.config();
 import mongoose from "mongoose";
 import userRoutes from './routes/userRoutes.js'
 import chatRoutes from './routes/chatRoutes.js'
+import messageRoutes from './routes/messageRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 8001
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use("/user", userRoutes)
 app.use("/chat", chatRoutes)
+app.use("/message", messageRoutes)
 
 
 mongoose

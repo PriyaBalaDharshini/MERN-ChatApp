@@ -5,10 +5,10 @@ import UserModel from '../models/userModel.js';
 //it is responsible for creating or accessing a chat with resect to logged in user and id with which we are going to creat a chat
 const accessChat = asyncHandler(async (req, res) => {
     const { userId } = req.body;
-    console.log("UserId received from request body:", userId); // Log the userId
+    // console.log("UserId received from request body:", userId); 
 
     if (!userId) {
-        console.log("UserId param not sent");
+        //  console.log("UserId param not sent");
         return res.status(400).json({ message: "UserId param not sent" });
     }
 
@@ -83,35 +83,40 @@ const createGroupChat = asyncHandler(async (req, res) => {
         return res.status(400).send({ message: "Please fill all the fields" });
     }
 
-    var users = JSON.parse(req.body.users);
+    // Parse the users array from request body
+    let users = JSON.parse(req.body.users);
 
     if (users.length < 2) {
         return res.status(400).send("More than 2 users required for a group chat");
     }
 
-    users.push(req.user);
+    // Add the logged-in user (req.user) to the users array
+    users.push(req.user._id);
 
     try {
+        // Create the group chat
         const groupChat = await ChatModel.create({
             chatName: req.body.name,
-            users: uniqueUsers,
+            users: users, // Use 'users' instead of 'uniqueUsers'
             isGroupChat: true,
-            groupAdmin: req.user
+            groupAdmin: req.user._id // The logged-in user is the admin
         });
 
         const fullGroupChat = await ChatModel.findOne({ _id: groupChat._id })
             .populate("users", "-password")
             .populate("groupAdmin", "-password");
 
+        // Send the created group chat as a response
         res.status(201).json(fullGroupChat);
     } catch (error) {
+        // Handle errors
         res.status(400).json({ message: error.message });
     }
 });
 
-
 const renameGroup = asyncHandler(async (req, res) => {
     const { chatId, chatName } = req.body
+    // console.log('Received request to rename group:', { chatId, chatName });
 
     const updateChatName = await ChatModel.findByIdAndUpdate(
         chatId,
@@ -125,6 +130,7 @@ const renameGroup = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error("Chat Not Found")
     } else {
+        // console.log('Successfully updated chat name:', updateChatName);
         res.status(200).json(updateChatName)
     }
 })
