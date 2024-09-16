@@ -71,7 +71,6 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
             setSelectedChat(data);
             setFetchAgain(!fetchAgain);
             setLoading(false);
-
         } catch (error) {
             toast({
                 title: "Error Occured!",
@@ -119,7 +118,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
             setLoading(false);
 
         } catch (error) {
-
+            console.log(error);
         }
     }
 
@@ -148,6 +147,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
             setRenameLoading(false)
 
         } catch (error) {
+            console.log(error);
             toast({
                 title: "Error Occured! lease Again",
                 description: error?.response?.data?.message,

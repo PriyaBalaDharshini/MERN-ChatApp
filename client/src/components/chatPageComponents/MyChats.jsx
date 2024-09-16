@@ -42,7 +42,7 @@ const MyChats = ({ fetchAgain }) => {
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
         fetchChat()
-    }, [fetchAgain])
+    }, [])
 
     return (
         <Box

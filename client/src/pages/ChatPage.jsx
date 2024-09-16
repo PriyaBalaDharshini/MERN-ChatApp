@@ -8,7 +8,7 @@ import ChatBox from '../components/chatPageComponents/ChatBox';
 const ChatPage = () => {
     // 10. Fetch the user from the ChatState hook
     const { user } = ChatState();
-    const [fetchAgain, setFetchAgain] = useState()
+    const [fetchAgain, setFetchAgain] = useState(false)
 
     return (
         <div style={{ width: "100%" }}>

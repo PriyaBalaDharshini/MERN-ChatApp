@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema({
     },
     pic: {
         type: String,
-        default: "https://cdn-icons-png.flaticon.com/128/3899/3899618.png"
+        // default: "https://cdn-icons-png.flaticon.com/128/3899/3899618.png" 
     }
 },
     { timestamps: true }
