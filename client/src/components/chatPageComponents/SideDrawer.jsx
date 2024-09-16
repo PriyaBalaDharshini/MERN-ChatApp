@@ -8,6 +8,8 @@ import axios from 'axios'
 import { API_BASE_URL } from '../../config'
 import ChatLoading from './ChatLoading'
 import UserListItem from '../userAvatar/UserListItem'
+import { getSender } from '../../config/ChatLogics'
+import { Badge } from '@chakra-ui/react'
 
 
 const SideDrawer = () => {
@@ -17,7 +19,7 @@ const SideDrawer = () => {
     const [loading, setLoading] = useState(false)
     const [loadingChat, setLoadingChat] = useState(false)
 
-    const { user, setSelectedChat, chat, setChat } = ChatState()
+    const { user, setSelectedChat, chat, setChat, notification, setNotification } = ChatState()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const toast = useToast()
     const navigate = useNavigate()
@@ -124,11 +126,25 @@ const SideDrawer = () => {
                 <div>
                     <Menu>
                         <MenuButton p={1}>
-                            <BellIcon fontSize={'xl'} m={1} />
+                            <Badge borderRadius='full' px={2} py={1} colorScheme='red'>{notification.length}</Badge>
+                            <BellIcon fontSize={'2xl'} m={1} />
                         </MenuButton>
-                        {/* <MenuList>
+                        <MenuList p={3}
+                        >
+                            {!notification.length && "No New Messages"}
+                            {notification?.map(n => (
+                                <MenuItem key={n._id}
+                                    onClick={() => {
+                                        setSelectedChat(n.chat)
+                                        setNotification(notification.filter((noti) => noti != n))
+                                    }
+                                    }
 
-                    </MenuList> */}
+                                >
+                                    {n.chat.isGroupChat ? `Notification from ${n.chat.chatName}` : `New Message  from ${getSender(user, n.chat.users)}`}
+                                </MenuItem>
+                            ))}
+                        </MenuList>
                     </Menu>
                     <Menu>
                         <MenuButton as={Button} rightIcon={<ChevronDownIcon fontSize={'xl'} />}>

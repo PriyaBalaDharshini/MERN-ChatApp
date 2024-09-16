@@ -12,6 +12,7 @@ const ChatProvider = ({ children }) => {
     const [user, setUser] = useState();
     const [selectedChat, setSelectedChat] = useState();
     const [chat, setChat] = useState([]);
+    const [notification, setNotification] = useState([]);
 
     // 7. Use the useEffect hook to run this when the component mounts
     useEffect(() => {
@@ -28,7 +29,17 @@ const ChatProvider = ({ children }) => {
 
     // 6. Pass the state (user, setUser) down to the whole app via the context provider
     return (
-        <ChatContext.Provider value={{ user, setUser, selectedChat, setSelectedChat, chat, setChat }}>
+        <ChatContext.Provider
+            value={{
+                user,
+                setUser,
+                selectedChat,
+                setSelectedChat,
+                chat,
+                setChat,
+                notification,
+                setNotification
+            }}>
             {children}
         </ChatContext.Provider>
     );
