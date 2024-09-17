@@ -172,7 +172,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
             };
 
             const { data } = await axios.get(`${API_BASE_URL}/user/find-user?search=${search} `, config);
-            console.log(data);
+            //console.log(data);
             setLoading(false)
             setSearchResult(data)
 

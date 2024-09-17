@@ -77,7 +77,8 @@ const SideDrawer = () => {
                     Authorization: `Bearer ${user.accessToken}`
                 }
             }
-            //console.log(user);
+            console.log('Access Token:', user.accessToken);
+            console.log(user);
             const { data } = await axios.get(`${API_BASE_URL}/user/find-user?search=${search} `, config);
             console.log(data);
 
@@ -148,7 +149,7 @@ const SideDrawer = () => {
                     </Menu>
                     <Menu>
                         <MenuButton as={Button} rightIcon={<ChevronDownIcon fontSize={'xl'} />}>
-                            <Avatar backgroundColor={"black"} size={'sm'} cursor={'pointer'} name={user.name} src={user.name.charAt(0).toUpperCase()} />
+                            <Avatar size={'sm'} cursor={'pointer'} name={user.name} src={user.email.charAt(0).toUpperCase()} />
                         </MenuButton>
                         <MenuList>
                             <ProfileModel user={user}>

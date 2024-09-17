@@ -42,7 +42,7 @@ const GroupChatModel = ({ children }) => {
             const { data } = await axios.get(`${API_BASE_URL}/user/find-user?search=${search} `, config);
             setLoading(false)
             setSerachResults(data)
-            console.log(data);
+            //console.log(data);
 
         } catch (error) {
             toast({

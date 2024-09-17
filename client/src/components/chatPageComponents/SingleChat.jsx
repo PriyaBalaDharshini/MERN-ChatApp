@@ -71,7 +71,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             setLoading(true)
             const { data } = await axios.get(`${API_BASE_URL}/message/${selectedChat._id}`, config)
 
-            console.log(message);
+            //console.log(message);
 
             setMessage(data)
             setLoading(false)
@@ -93,7 +93,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         fetchMessages()
         selectedChatCompare = selectedChat
     }, [selectedChat])
-    console.log(notification, "-----");
+    //console.log(notification, "-----");
 
     useEffect(() => {
         socket.on("message received", (newMessageReceived) => {
@@ -130,13 +130,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     config
                 );
 
-                console.log("Response from server:", data);
+                //console.log("Response from server:", data);
                 setNewMessage("");
 
                 socket.emit("new message", data)
                 setMessage([...message, data]);
             } catch (error) {
-                console.log("Error:", error.response.data);
+                //console.log("Error:", error.response.data);
                 toast({
                     title: "Error Occured!",
                     description: "Failed to send the Message",
@@ -198,7 +198,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                                 <ProfileModel user={getSenderFull(user, selectedChat.users)} />
                             </>
                         ) : (
-                            <>{selectedChat.chatName.toUpperCase()}
+                            <>{selectedChat.chatName}
                                 <UpdateGroupChatModel
                                     fetchAgain={fetchAgain}
                                     setFetchAgain={setFetchAgain}

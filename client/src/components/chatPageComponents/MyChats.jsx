@@ -22,12 +22,14 @@ const MyChats = ({ fetchAgain }) => {
                     Authorization: `Bearer ${user.accessToken}`
                 }
             }
+            console.log('Access Token:', user.accessToken);
 
             const { data } = await axios.get(`${API_BASE_URL}/chat/fetch-chat`, config);
-            //console.log(data);
+            console.log("Fetched chats:", data);
             setChat(data)
 
         } catch (error) {
+            console.error(error.message);
             toast({
                 title: "Error fetching chat",
                 description: "Failed to load",
@@ -35,14 +37,16 @@ const MyChats = ({ fetchAgain }) => {
                 duration: 3000,
                 isClosable: true,
                 position: "bottom-left"
-            })
+            });
         }
     }
 
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
         fetchChat()
-    }, [])
+    }, [fetchAgain])
+
+
 
     return (
         <Box

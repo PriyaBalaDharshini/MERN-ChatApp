@@ -6,11 +6,11 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 const Signup = () => {
-    const [name, setName] = useState()
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
-    const [confirmPassword, setConfirmPassword] = useState()
-    const [pic, setPic] = useState()
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
+    //const [pic, setPic] = useState()
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -21,9 +21,9 @@ const Signup = () => {
     const handleShowPassword = () => setShowPassword(!showPassword);
     const handleShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
-    const postDetails = (picture) => { }
+    //const postDetails = (picture) => { }
 
-    const sumbitHandler = async () => {
+    const handleSignup = async () => {
         setLoading(true)
         if (!name || !email || !password || !confirmPassword) {
             toast({
@@ -49,7 +49,7 @@ const Signup = () => {
             setLoading(false);
             return;
         }
-        console.log(name, email, password, pic);
+        console.log(name, email, password);
         try {
             const config = {
                 headers: {
@@ -59,10 +59,10 @@ const Signup = () => {
 
             const { data } = await axios.post(
                 `${API_BASE_URL}/user/register`,
-                { name, email, password, pic },
+                { name, email, password },
                 config
             )
-            console.log(data);
+
             toast({
                 title: "Registration Successful",
                 status: "success",
@@ -71,6 +71,7 @@ const Signup = () => {
                 position: "bottom",
             });
             localStorage.setItem("userInfo", JSON.stringify(data));
+            console.log(data);
             setLoading(false)
             navigate("/chat")
 
@@ -140,16 +141,6 @@ const Signup = () => {
             </FormControl>
 
 
-            {/* <FormControl id='pic' isRequired >
-                <FormLabel>Upload Profile Pic: </FormLabel>
-                <Input
-                    type='file'
-                    onChange={(e) => postDetails(e.target.files[0])}
-                    p={1.5}
-                    accept='image/*'
-                />
-            </FormControl> */}
-
             <Button
                 p={6}
                 borderRadius={'xl'}
@@ -157,7 +148,7 @@ const Signup = () => {
                 w={"100%"}
                 mt={4}
                 isLoading={loading}
-                onClick={sumbitHandler}
+                onClick={handleSignup}
             >
                 Signup
             </Button>
