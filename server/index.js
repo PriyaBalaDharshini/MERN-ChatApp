@@ -7,7 +7,7 @@ import userRoutes from './routes/userRoutes.js'
 import chatRoutes from './routes/chatRoutes.js'
 import messageRoutes from './routes/messageRoutes.js'
 import { Server } from "socket.io";
-import userController from "./controllers/userController.js";
+import path from "path"
 
 const app = express();
 const PORT = process.env.PORT || 8001
@@ -19,6 +19,10 @@ app.use(express.json());
 app.use("/user", userRoutes)
 app.use("/chat", chatRoutes)
 app.use("/message", messageRoutes)
+
+app.get("/", (req, res) => {
+    res.send("Welcome to the backend server of Chat Application")
+})
 
 
 mongoose
