@@ -135,19 +135,21 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
                 }
             };
 
+
             const { data } = await axios.put(`${API_BASE_URL}/chat/rename-group`,
                 {
                     chatId: selectedChat._id,
                     chatName: groupChatName
                 },
                 config)
+            console.log(data);
 
             setSelectedChat(data)
             setFetchAgain(!fetchAgain)
             setRenameLoading(false)
 
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             toast({
                 title: "Error Occured! lease Again",
                 description: error?.response?.data?.message,

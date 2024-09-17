@@ -27,6 +27,11 @@ const ChatProvider = ({ children }) => {
         }
     }, [navigate]);
 
+    // 10. Use the useEffect hook to save notifications to localStorage when they change
+    /* useEffect(() => {
+        localStorage.setItem('notifications', JSON.stringify(notification));
+    }, [notification]); */
+
     // 6. Pass the state (user, setUser) down to the whole app via the context provider
     return (
         <ChatContext.Provider

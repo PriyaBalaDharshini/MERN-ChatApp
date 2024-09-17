@@ -77,9 +77,10 @@ const Signup = () => {
             navigate("/chat")
 
         } catch (error) {
+            console.log(error);
             toast({
                 title: "Error Occured!",
-                description: error.response?.data?.message || "Something went wrong",
+                description: "Something went wrong",
                 status: "error",
                 duration: 5000,
                 isClosable: true,

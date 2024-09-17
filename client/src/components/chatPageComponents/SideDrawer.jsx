@@ -1,5 +1,5 @@
 import { Box, Button, Tooltip, Text, Menu, MenuButton, MenuList, Avatar, MenuItem, MenuDivider, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Input, useToast, Spinner } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SearchIcon, BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { ChatState } from '../../context/ChatProvider'
 import ProfileModel from './ProfileModel'
@@ -23,6 +23,14 @@ const SideDrawer = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const toast = useToast()
     const navigate = useNavigate()
+
+    /* useEffect(() => {
+        const savedNotifications = localStorage.getItem('notifications');
+        if (savedNotifications) {
+            setNotification(JSON.parse(savedNotifications));
+            localStorage.removeItem('notifications');
+        }
+    }, [setNotification]); */
 
     const logoutHandler = () => {
         localStorage.removeItem("userInfo");

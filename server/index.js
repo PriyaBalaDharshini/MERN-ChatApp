@@ -14,9 +14,9 @@ const PORT = process.env.PORT || 8001;
 const DB = process.env.DB_URL;
 
 app.use(cors({
-    origin: 'https://chatapplication-mernstack.netlify.app',
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    credentials: true,
 }));
 app.options('*', cors()); // Enable preflight for all routes
 
@@ -38,10 +38,11 @@ mongoose
 const server = app.listen(PORT, () => { console.log(`Backend Running on ${PORT}`); });
 
 const io = new Server(server, {
-    pingTimeout: 60000,
     cors: {
-        origin: "https://chatapplication-mernstack.netlify.app",
-    },
+        origin: 'http://localhost:5173',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true,
+    }
 });
 
 io.on("connection", (socket) => {
