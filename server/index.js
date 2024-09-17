@@ -13,8 +13,12 @@ const app = express();
 const PORT = process.env.PORT || 8001;
 const DB = process.env.DB_URL;
 
+const allowedOrigins = [
+    'https://chatapplication-mernstack.netlify.app',
+    'http://localhost:5173'
+];
 app.use(cors({
-    origin: 'https://chatapplication-mernstack.netlify.app',
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
