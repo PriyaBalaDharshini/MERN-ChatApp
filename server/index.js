@@ -17,27 +17,36 @@ const allowedOrigins = [
     'https://chatapplication-mernstack.netlify.app',
     'http://localhost:5173'
 ];
-app.use(cors({
+/* app.use(cors({
     origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
+})); */
+
+app.use(cors({
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        } else {
+            return callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
 }));
-app.options('*', cors()); // Enable preflight for all routes
+
+app.options('*', cors());
 
 app.use(express.json());
-
 app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
 app.use("/message", messageRoutes);
 
-app.get("/", (req, res) => {
-    res.send("Welcome to the backend server of Chat Application");
-});
+app.get("/", (req, res) => { res.send("Welcome to the backend server of Chat Application") });
 
-mongoose
-    .connect(DB)
-    .then(() => console.log("Database Connection Successful"))
-    .catch((err) => console.log(err));
+mongoose.connect(DB).then(() => console.log("Database Connection Successful")).catch((err) => console.log(err));
 
 const server = app.listen(PORT, () => { console.log(`Backend Running on ${PORT}`); });
 
