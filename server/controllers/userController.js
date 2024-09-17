@@ -32,15 +32,17 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // If user is created successfully
     if (user) {
+        const accessToken = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_CODE, { expiresIn: '50d' });
         res.status(201).json({
             _id: user._id,
             name: user.name,
             email: user.email,
-            pic: user.pic
+            pic: user.pic,
+            accessToken
         });
     } else {
         res.status(400);
-        throw new Error("Something went wrong. Please try again.");
+        throw new Error("Something went wrong");
     }
 });
 
