@@ -49,7 +49,7 @@ const Signup = () => {
             setLoading(false);
             return;
         }
-        console.log(name, email, password);
+
         try {
             const config = {
                 headers: {
@@ -62,6 +62,7 @@ const Signup = () => {
                 { name, email, password },
                 config
             )
+            console.log(data);
 
             toast({
                 title: "Registration Successful",
